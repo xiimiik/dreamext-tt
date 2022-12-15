@@ -8,9 +8,11 @@ import {
   Text,
 } from 'react-native';
 
+import {NavProp} from '../types/NavProps';
+
 import {emailValidation, passwordValidation} from '../utils/regex';
 
-export const LoginScreen = () => {
+export const LoginScreen: React.FC<NavProp> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,8 +27,8 @@ export const LoginScreen = () => {
         <TextInput
           style={styles.textInput}
           placeholder="Email."
-          placeholderTextColor="#003f5c"
           onChangeText={(inputEmail: string) => setEmail(inputEmail)}
+          value={email}
         />
       </View>
 
@@ -34,15 +36,21 @@ export const LoginScreen = () => {
         <TextInput
           style={styles.textInput}
           placeholder="Password."
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="#fff"
           secureTextEntry={true}
           onChangeText={(inputPass: string) => setPassword(inputPass)}
+          value={password}
         />
       </View>
 
       <TouchableOpacity
         style={[styles.button, isValid && styles.button_visible]}
-        disabled={!isValid}>
+        disabled={!isValid}
+        onPress={() => {
+          navigation.navigate('Posts');
+          setEmail('');
+          setPassword('');
+        }}>
         <Text style={styles.buttonText}>Login.</Text>
       </TouchableOpacity>
     </View>
@@ -58,8 +66,8 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: '#FFC0CB',
-    borderRadius: 30,
+    backgroundColor: '#C0C0C0',
+    borderRadius: 12,
     width: '70%',
     height: 45,
     marginBottom: 20,
@@ -81,12 +89,12 @@ const styles = StyleSheet.create({
 
   button: {
     padding: 12,
-    backgroundColor: '#f00',
+    backgroundColor: '#E25544',
     width: '50%',
     textAlign: 'center',
     borderRadius: 12,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
     opacity: 0,
   },
 

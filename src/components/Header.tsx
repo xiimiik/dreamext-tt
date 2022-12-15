@@ -1,11 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {NavProp} from '../types/NavProps';
 
-export const Header = () => {
+export const Header: React.FC<NavProp> = ({navigation}) => {
   return (
     <View style={styles.header}>
       <Image style={styles.image} source={require('../assets/dreamext.png')} />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Log out</Text>
       </TouchableOpacity>
     </View>
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
 
   button: {
     padding: 12,
-    backgroundColor: '#f00',
+    backgroundColor: '#E25544',
     textAlign: 'center',
     borderRadius: 12,
   },

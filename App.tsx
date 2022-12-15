@@ -1,16 +1,9 @@
 import React from 'react';
 
-import {View} from 'react-native';
-import {HomeScreen} from './src/screens/HomeScreen';
+import {Navigation} from './src/components/Navigation';
 
 const App: React.FC = () => {
-  return (
-    <View>
-      <HomeScreen />
-    </View>
-  );
+  return <Navigation />;
 };
-
-// const styles = StyleSheet.create({});
 
 export default App;
