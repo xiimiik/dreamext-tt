@@ -1,29 +1,16 @@
 import React from 'react';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {View} from 'react-native';
+import {HomeScreen} from './src/screens/HomeScreen';
 
-const App = () => {
+const App: React.FC = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>
-          some text
-        </Text>
-      </View>
-    </SafeAreaView>
+    <View>
+      <HomeScreen />
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  
-});
+// const styles = StyleSheet.create({});
 
 export default App;
