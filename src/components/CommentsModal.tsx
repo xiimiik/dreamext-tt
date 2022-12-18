@@ -39,9 +39,9 @@ export const CommentsModal: React.FC<Props> = ({id}) => {
     getCommentsFromServer();
   }, [getCommentsFromServer]);
 
-  const renderComments = ({item}: {item: Comment}) => {
+  const renderComments = useCallback(({item}: {item: Comment}) => {
     return <PostItem title={item.name} body={item.body} />;
-  };
+  }, []);
 
   if (isLoading) {
     return (

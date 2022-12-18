@@ -11,19 +11,35 @@ import {
 import Snackbar from 'react-native-snackbar';
 
 import {NavProp} from '../types/NavProps';
+import {User} from '../types/User';
+
+const users: User[] = [
+  {id: 1, email: '123@gmail.com', password: '123123'},
+  {id: 2, email: '123456@gmail.com', password: '123123'},
+  {id: 3, email: 'takaagmail@gmail.com', password: '123123'},
+  {id: 4, email: 'gmailfor25@gmail.com', password: '123123'},
+  {id: 5, email: 'wantagmail12@gmail.com', password: '123123'},
+];
 
 export const LoginScreen: React.FC<NavProp> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const isEmpty = email.length === 0 || password.length === 0;
 
-  if (isEmpty) {
+  const hasUser = users.find(
+    user => user.email === email && user.password === password,
+  );
+
+  if (hasError) {
     Snackbar.show({
-      text: 'Please, fill the fields',
+      text: 'User not found',
       duration: Snackbar.LENGTH_SHORT,
       backgroundColor: '#E25544',
     });
+
+    setHasError(false);
   }
 
   return (
@@ -54,9 +70,14 @@ export const LoginScreen: React.FC<NavProp> = ({navigation}) => {
         style={[styles.button, !isEmpty && styles.button_visible]}
         disabled={isEmpty}
         onPress={() => {
-          navigation.navigate('Posts');
-          setEmail('');
-          setPassword('');
+          if (hasUser) {
+            navigation.navigate('Posts');
+            setEmail('');
+            setPassword('');
+          } else {
+            setHasError(true);
+            setPassword('');
+          }
         }}>
         <Text style={styles.buttonText}>Login.</Text>
       </TouchableOpacity>
