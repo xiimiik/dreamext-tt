@@ -8,16 +8,23 @@ import {
   Text,
 } from 'react-native';
 
-import {NavProp} from '../types/NavProps';
+import Snackbar from 'react-native-snackbar';
 
-import {emailValidation, passwordValidation} from '../utils/regex';
+import {NavProp} from '../types/NavProps';
 
 export const LoginScreen: React.FC<NavProp> = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const isValid =
-    emailValidation.test(email) && passwordValidation.test(password);
+  const isEmpty = email.length === 0 || password.length === 0;
+
+  if (isEmpty) {
+    Snackbar.show({
+      text: 'Please, fill the fields',
+      duration: Snackbar.LENGTH_SHORT,
+      backgroundColor: '#E25544',
+    });
+  }
 
   return (
     <View style={styles.mainView}>
@@ -44,8 +51,8 @@ export const LoginScreen: React.FC<NavProp> = ({navigation}) => {
       </View>
 
       <TouchableOpacity
-        style={[styles.button, isValid && styles.button_visible]}
-        disabled={!isValid}
+        style={[styles.button, !isEmpty && styles.button_visible]}
+        disabled={isEmpty}
         onPress={() => {
           navigation.navigate('Posts');
           setEmail('');

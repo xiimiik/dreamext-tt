@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 type Props = {
   title: string;
@@ -9,10 +9,8 @@ type Props = {
 export const PostItem: React.FC<Props> = ({title, body}) => {
   return (
     <View style={styles.post}>
-      <TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
-        <Text>{body}</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>{title}</Text>
+      <Text>{body}</Text>
     </View>
   );
 };
@@ -20,8 +18,6 @@ export const PostItem: React.FC<Props> = ({title, body}) => {
 const styles = StyleSheet.create({
   post: {
     width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
   },

@@ -6,21 +6,25 @@ import {
   Text,
   StyleSheet,
   RefreshControl,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
+
 import Snackbar from 'react-native-snackbar';
+
 import {getPosts} from '../api/posts';
 import {Post} from '../types/Post';
 import {PostItem} from './PostItem';
+
+import {CommentsModal} from './CommentsModal';
 
 export const PostList = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-
-  const renderItem = useCallback(
-    ({item}: {item: Post}) => <PostItem title={item.title} body={item.body} />,
-    [],
-  );
+  const [isActive, setIsActive] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(0);
 
   const getPostsFromServer = useCallback(async () => {
     try {
@@ -33,6 +37,22 @@ export const PostList = () => {
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const keyExtractor = useCallback((item: Post) => {
+    return `${item.id}`;
+  }, []);
+
+  const renderPost = useCallback(({item}: {item: Post}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setIsActive(true);
+          setSelectedPostId(item.id);
+        }}>
+        <PostItem title={item.title} body={item.body} />
+      </TouchableOpacity>
+    );
   }, []);
 
   useEffect(() => {
@@ -49,7 +69,7 @@ export const PostList = () => {
   }
 
   if (hasError) {
-    return Snackbar.show({
+    Snackbar.show({
       text: 'An error occurred',
       duration: Snackbar.LENGTH_INDEFINITE,
       backgroundColor: '#E25544',
@@ -66,7 +86,9 @@ export const PostList = () => {
     <View>
       <FlatList
         data={posts}
-        renderItem={renderItem}
+        initialNumToRender={10}
+        renderItem={renderPost}
+        keyExtractor={keyExtractor}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -74,6 +96,20 @@ export const PostList = () => {
           />
         }
       />
+
+      <Modal
+        visible={isActive}
+        transparent={true}
+        onRequestClose={() => setIsActive(false)}
+        animationType={'slide'}>
+        <TouchableWithoutFeedback onPress={() => setIsActive(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+
+        <View style={styles.modalContent}>
+          <CommentsModal id={selectedPostId} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -83,5 +119,20 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    margin: '5%',
+  },
+
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 });
